@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const API_URL = "https://your-python-api.com/ask"; // Make sure to leave the URI as /ask
   const input = document.getElementById("ai-query");
   const button = document.getElementById("ai-submit");
   const output = document.getElementById("ai-chat-messages");
@@ -18,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     button.disabled = true;
     typing.style.display = "block";
 
-    const response = await fetch("https://your-python-api.com/ask", {
+    const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query: query })
