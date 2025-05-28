@@ -1,0 +1,50 @@
+# /etc/systemd/system/uvicorn.service
+# Copy this file to above path, then make sure main.py is in the WorkingDirectory. Run:
+# systemctl daemon-reexec
+# systemctl enable uvicorn.service
+# systemctl restart uvicorn.service
+
+[Unit]
+Description=AI Assistant FastAPI (Uvicorn)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/path/to/wp-content/plugins/wp-ai-chat
+
+# This is a hack. It should work better than this.
+ExecStart=/bin/bash -c './venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000'
+
+User=www
+Group=www
+Restart=always
+RestartSec=3
+
+# Activate venv manually
+Environment="VIRTUAL_ENV=/path/to/wp-content/plugins/wp-ai-chat/venv"
+Environment="PATH=/path/to/wp-content/plugins/wp-ai-chat/venv/bin:/usr/bin:/bin"
+Environment="PYTHONPATH=/path/to/wp-content/plugins/wp-ai-chat"
+
+# OpenAI key (or load via env file)
+Environment=OPENAI_API_KEY=<APIKEY>
+
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/path/to/chroma-db/
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictRealtime=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
