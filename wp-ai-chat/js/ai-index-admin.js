@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   button.addEventListener('click', async () => {
     button.disabled = true;
     button.textContent = "Reindexing...";
-    log.textContent = "⏳ Starting indexing...\n";
+    log.textContent = "Starting indexing...\n";
 
     try {
       const response = await fetch(AIIndexAjax.ajax_url, {
@@ -20,16 +20,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await response.json();
       if (data.success) {
         const output = JSON.parse(data.data.response);
-        log.textContent += "✅ Indexing complete.\n\n";
+        log.textContent += "Indexing complete.\n\n";
         log.textContent += output.stdout || "(no stdout)";
         if (output.stderr) {
-          log.textContent += "\\n⚠️ Errors:\\n" + output.stderr;
+          log.textContent += "\\nErrors:\\n" + output.stderr;
         }
       } else {
-        log.textContent += "❌ Error: " + data.data.error;
+        log.textContent += "Error: " + data.data.error;
       }
     } catch (err) {
-      log.textContent += "❌ Request failed: " + err.message;
+      log.textContent += "Request failed: " + err.message;
     }
 
     button.disabled = false;
